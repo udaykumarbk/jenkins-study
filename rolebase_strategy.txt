@@ -1,0 +1,22 @@
+1.Matrix-based security
+
+2.Roleback  access control in jenkins
+
+(Global Role)
+Created two rules
+Dev high --> over all read, job read 
+dev low -->over all read and build
+
+Observation: when we apply both roles both role will take place
+
+----------------------------
+Global role and item role
+
+Global roles  -->	DevGlobal	 -->overall read
+
+Item roles   -->DevItem	 --> Job read and job build
+
+
+3.Anyone can do anything
+4.Logged-in users can do anything	
+5.Project-based Matrix Authorization Strategy

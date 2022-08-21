@@ -1,0 +1,17 @@
+pipeline{
+agent any 
+
+stages{
+
+stage('pull and runcontainer'){
+
+steps{
+
+sh "docker pull shivaraj123/17"
+
+sh "docker run -d -p 8080:8080 shivaraj123/17"
+}
+}
+
+}
+}

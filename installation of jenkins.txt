@@ -1,0 +1,53 @@
+sudo amazon-linux-extras install java-openjdk11 -y
+
+
+sudo update-alternatives --config 'java'
+
+vim .bash_profile
+
+JAVA_HOME="/usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.amzn2.0.1.x86_64/bin/java"
+
+source .bash_profile
+echo $JAVA_HOME
+
+To download and install Jenkins:
+
+To ensure that your software packages are up to date on your instance, use the following command to perform a quick software update:
+
+[ec2-user ~]$ sudo yum update –y
+Add the Jenkins repo using the following command:
+
+[ec2-user ~]$ sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+Import a key file from Jenkins-CI to enable installation from the package:
+
+[ec2-user ~]$ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+[ec2-user ~]$ sudo yum upgrade
+Install Jenkins:
+
+[ec2-user ~]$ sudo yum install jenkins java-1.8.0-openjdk-devel -y
+[ec2-user ~]$ sudo systemctl daemon-reload
+Start Jenkins as a service:
+
+[ec2-user ~]$ sudo systemctl start jenkins
+You can check the status of the Jenkins service using the command:
+
+[ec2-user ~]$ sudo systemctl status jenkins
+
+-------configure maven.java and git home path in jenkin console ----
+
+ $ mvn --version
+
+Apache Maven 3.0.5 (Red Hat 3.0.5-17)
+Maven home: /usr/share/maven
+Java version: 1.8.0_282, vendor: Red Hat, Inc.
+Java home: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.amzn2.0.1.x86_64/jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "4.14.238-182.422.amzn2.x86_64", arch: "amd64", family: "unix"
+
+$which git
+
+/usr/bin/git
+
+
+

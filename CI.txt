@@ -1,0 +1,91 @@
+pipeline{
+agent any
+environment{
+        
+        dockerImage = ''
+        registry = 'shivaraj123/$BUILD_ID'
+		registryCredential= '1153b905-47e2-4a9b-9d01-ea6f64540be8'
+    }
+tools {
+	maven 'shiva_maven'
+}
+stages{
+
+stage("scm"){
+	steps {
+	
+	git branch: 'Master', credentialsId: '513ee867-8c78-4610-b85f-a5f6daaa5381', url: 'https://github.com/Shivaraj600/java-maven-junit-helloworld.git'
+	}
+
+}
+
+stage("Build Artifact"){
+
+	steps{
+	sh "mvn clean install"
+	}
+
+}
+
+stage('SonarCloud'){
+
+environment {
+    SCANNER_HOME = tool 'SonarQubeScanner'
+    ORGANIZATION = "igorstojanovski-github"
+    PROJECT_NAME = "shashi"
+  }
+	
+	steps{
+	
+	withSonarQubeEnv(installationName: 'SonarCloudOne', credentialsId: '513ee867-8c78-4610-b85f-a5f6daaa5381') {
+			sh '''$SCANNER_HOME/bin/sonar-scanner \
+		-Dsonar.passsword=admin \
+		-Dsonar.projectKey=shashi \
+        -Dsonar.java.binaries=/var/lib/jenkins/workspace/job2/target \
+        -Dsonar.host.url=http://54.198.92.7:9000/ \
+        -Dsonar.sources=/var/lib/jenkins/workspace/job2/src/ '''
+	
+	}
+
+}
+}
+
+stage ('quality gate'){
+    steps{timeout(time: 5, unit: 'MINUTES') {
+              waitForQualityGate abortPipeline: true
+              }
+        
+    }
+}
+
+
+		
+stage('build docker image') {
+        
+            steps {
+                
+                script {
+                    dockerImage = docker.build registry
+                }
+            
+            
+        }
+		}
+		
+stage('upload dockerimage'){
+		
+			steps {
+			
+				script {
+				docker.withRegistry( '', registryCredential ) {
+				dockerImage.push()
+            }
+				
+				}
+			}
+		}
+
+
+}
+}
+ 
